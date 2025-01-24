@@ -31,10 +31,10 @@ function DataEditor({ initialData, file, vendorSuggestions = [], onSave, onCance
 
   const handleTypeChange = (value) => {
     if (value === 'Autre') {
-      setCustomType('');
+      handleChange('type', '');
     } else {
-      setCustomType('');
       handleChange('type', value);
+      setCustomType('');
     }
   };
 
@@ -45,10 +45,10 @@ function DataEditor({ initialData, file, vendorSuggestions = [], onSave, onCance
 
   const handleVendorChange = (value) => {
     if (value === 'Autre') {
-      setCustomVendor('');
+      handleChange('vendor', '');
     } else {
-      setCustomVendor('');
       handleChange('vendor', value);
+      setCustomVendor('');
     }
   };
 
@@ -122,7 +122,7 @@ function DataEditor({ initialData, file, vendorSuggestions = [], onSave, onCance
                 ))}
                 <option value="Autre">Autre</option>
               </select>
-              {(data.vendor === customVendor || data.vendor === 'Autre') && (
+              {data.vendor === '' && (
                 <input
                   type="text"
                   value={customVendor}
@@ -163,7 +163,7 @@ function DataEditor({ initialData, file, vendorSuggestions = [], onSave, onCance
                 <option value="Hébergement">Hébergement</option>
                 <option value="Autre">Autre</option>
               </select>
-              {(data.type === customType || data.type === 'Autre') && (
+              {data.type === '' && (
                 <input
                   type="text"
                   value={customType}
