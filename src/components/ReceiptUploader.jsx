@@ -52,13 +52,14 @@ function ReceiptUploader({ accessToken }) {
         error: null,
       });
 
-      // Format the filename
-      const date = new Date(data.date.split('-').reverse().join('-'));
-      const formattedDate = `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getFullYear()}`;
-      const newFileName = `${formattedDate}_${data.amount}€_${data.vendor}${file.name.substring(file.name.lastIndexOf('.'))}`;
+      // Format the filename using receipt date
+      const receiptDate = new Date(data.date.split('-').reverse().join('-'));
+      const formattedReceiptDate = `${receiptDate.getDate().toString().padStart(2, '0')}-${(receiptDate.getMonth() + 1).toString().padStart(2, '0')}-${receiptDate.getFullYear()}`;
+      const newFileName = `${formattedReceiptDate}_${data.amount}€_${data.vendor}${file.name.substring(file.name.lastIndexOf('.'))}`;
 
-      // Create folder structure
-      const folderId = await driveService.createFolderStructure(date.getFullYear(), date.getMonth() + 1);
+      // Create folder structure using current date
+      const currentDate = new Date();
+      const folderId = await driveService.createFolderStructure(currentDate.getFullYear(), currentDate.getMonth() + 1);
 
       // Upload to Google Drive
       updateProcessingState({ currentStep: 'Téléchargement vers Google Drive...' });
@@ -67,7 +68,7 @@ function ReceiptUploader({ accessToken }) {
       // Update Google Sheets
       updateProcessingState({ currentStep: 'Mise à jour du tableur...' });
       await sheetsService.appendRow([
-        formattedDate,
+        formattedReceiptDate,
         data.vendor,
         data.amount,
         data.type || '', // Type de dépense
@@ -78,7 +79,7 @@ function ReceiptUploader({ accessToken }) {
         isProcessing: false,
         currentStep: null,
         extractedData: {
-          date: formattedDate,
+          date: formattedReceiptDate,
           vendor: data.vendor,
           amount: data.amount,
           type: data.type,
