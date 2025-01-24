@@ -4,6 +4,8 @@ function DataEditor({ initialData, file, vendorSuggestions = [], onSave, onCance
   const [data, setData] = useState(initialData);
   const [customType, setCustomType] = useState('');
   const [customVendor, setCustomVendor] = useState('');
+  const [isCustomVendor, setIsCustomVendor] = useState(false);
+  const [isCustomType, setIsCustomType] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
   const [showVendorSuggestions, setShowVendorSuggestions] = useState(false);
 
@@ -31,8 +33,10 @@ function DataEditor({ initialData, file, vendorSuggestions = [], onSave, onCance
 
   const handleTypeChange = (value) => {
     if (value === 'Autre') {
+      setIsCustomType(true);
       handleChange('type', '');
     } else {
+      setIsCustomType(false);
       handleChange('type', value);
       setCustomType('');
     }
@@ -45,8 +49,10 @@ function DataEditor({ initialData, file, vendorSuggestions = [], onSave, onCance
 
   const handleVendorChange = (value) => {
     if (value === 'Autre') {
+      setIsCustomVendor(true);
       handleChange('vendor', '');
     } else {
+      setIsCustomVendor(false);
       handleChange('vendor', value);
       setCustomVendor('');
     }
@@ -112,7 +118,7 @@ function DataEditor({ initialData, file, vendorSuggestions = [], onSave, onCance
               </label>
               <select
                 id="vendor"
-                value={data.vendor === customVendor ? 'Autre' : data.vendor}
+                value={isCustomVendor ? 'Autre' : data.vendor}
                 onChange={(e) => handleVendorChange(e.target.value)}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               >
@@ -122,7 +128,7 @@ function DataEditor({ initialData, file, vendorSuggestions = [], onSave, onCance
                 ))}
                 <option value="Autre">Autre</option>
               </select>
-              {data.vendor === '' && (
+              {isCustomVendor && (
                 <input
                   type="text"
                   value={customVendor}
@@ -151,7 +157,7 @@ function DataEditor({ initialData, file, vendorSuggestions = [], onSave, onCance
               </label>
               <select
                 id="type"
-                value={data.type === customType ? 'Autre' : data.type}
+                value={isCustomType ? 'Autre' : data.type}
                 onChange={(e) => handleTypeChange(e.target.value)}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               >
@@ -163,7 +169,7 @@ function DataEditor({ initialData, file, vendorSuggestions = [], onSave, onCance
                 <option value="Hébergement">Hébergement</option>
                 <option value="Autre">Autre</option>
               </select>
-              {data.type === '' && (
+              {isCustomType && (
                 <input
                   type="text"
                   value={customType}
